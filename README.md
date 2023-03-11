@@ -54,7 +54,7 @@ NucleusCore.configure do |config|
 end
 ```
 
-3. Create a class that implements the methods below. The parameter is a subclass of `Nucleus::ResponseAdapter`.
+3. To render responses using the framework create a class that implements the methods below and delegates to the respective framework methods. The `entity` parameter is an instance of `Nucleus::ResponseAdapter`.
 
 ```ruby
 class ResponderAdapter
@@ -78,7 +78,7 @@ class ResponderAdapter
 end
 ```
 
-4. Create a class that implements `call` which returns a hash of request details. Ideally the values are primitives, and not objects from the framework. E.g not `ActionController::StrongParameters`.
+4. To accept a request and pass it to your business logic create a class that implements `call` that returns a hash of request details.
 
 ```ruby
 class RequestAdapter
@@ -180,11 +180,11 @@ class Views::Order < NucleusCore::View
       }
     }
 
-    NucleusCore::JsonResponse.new(content: content)
+    NucleusCore::ResponseAdapter.new(format: :json, content: content)
   end
 
   def pdf_response
-    NucleusCore::PdfResponse.new(content: generate_pdf())
+    NucleusCore::ResponseAdapter.new(format: :pdf, content: generate_pdf())
   end
 end
 ```
